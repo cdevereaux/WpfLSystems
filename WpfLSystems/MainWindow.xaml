@@ -51,7 +51,7 @@
                     </StackPanel>
                 </Border>
 
-                <Button x:Name="Generate">Generate Next Iteration</Button>
+                <Button x:Name="Generate">Display L-System</Button>
             </StackPanel>
         </Border>
     </Grid>

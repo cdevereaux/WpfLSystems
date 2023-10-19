@@ -13,7 +13,7 @@ namespace WpfLSystems
         {
             public double line_length = 5;
             public double line_width = 1;
-            public double angle_increment = 90;
+            public double angle_increment = 22.5;
             
             public double x = 0;
             public double y = 0;

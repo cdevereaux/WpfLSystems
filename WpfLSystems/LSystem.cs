@@ -12,10 +12,11 @@ namespace WpfLSystems
 
         public List<(char, String)> productions = new List<(char, string)>();
 
-        public LSystem(String axiom)
+        public LSystem()
         {
-            Axiom = axiom;
-            AddProduction('F', "F[+F]F[-F]F");
+            Axiom = "X";
+            AddProduction('F', "FF");
+            AddProduction('X', "F-[[X]+X]+F[+FX]-X");
         }
 
         public void AddProduction(char predecessor, String successor)

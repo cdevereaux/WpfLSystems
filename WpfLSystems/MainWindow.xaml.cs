@@ -22,8 +22,8 @@ namespace WpfLSystems
     {
 
         Turtle turtle = new Turtle();
-        LSystem lSystem = new LSystem("F");
-        uint n = 0;
+        LSystem lSystem = new LSystem();
+        uint n = 5;
         public MainWindow()
         {
             InitializeComponent();
