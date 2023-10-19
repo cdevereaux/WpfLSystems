@@ -9,20 +9,26 @@ namespace WpfLSystems
 {
     class Turtle
     {
-        private class DrawState
+        public class DrawState
         {
-            public double line_length = 20;
-            public double line_width = 2;
-            public double turning_angle = Math.PI / 2;
+            public double line_length = 5;
+            public double line_width = 1;
+            public double angle_increment = 90;
             
             public double x = 0;
             public double y = 0;
-            public double theta = 0;
+            public double theta = Math.PI / 2;
+
+            public DrawState Clone()
+            {
+                return this.MemberwiseClone() as DrawState;
+            }
         }
         
         List<Line> lines = new List<Line>();
         Stack<DrawState> stack = new Stack<DrawState>();
-        DrawState drawState = new DrawState();
+        public DrawState drawState = new DrawState();
+        public uint n = 0;
 
         private void MoveForward()
         {
@@ -46,14 +52,24 @@ namespace WpfLSystems
             lines.Add(line);
         }
 
+        private void MirrorAboutXAxis()
+        {
+            foreach (Line line in lines)
+            {
+                line.Y1 *= -1;
+                line.Y2 *= -1;
+            }
+        }
 
         private void Reset()
         {
             lines.Clear();
             stack.Clear();
-            drawState.x = drawState.y = drawState.theta = 0;
+            drawState.x = drawState.y = 0;
+            drawState.theta = Math.PI / 2;
         }
         
+
         public List<Line> InterpretString(String input)
         {
             Reset();
@@ -66,14 +82,24 @@ namespace WpfLSystems
                         DrawLine();
                         break;
                     case '+':
-                        drawState.theta += drawState.turning_angle;
+                        drawState.theta += drawState.angle_increment * Math.PI / 180;
                         break;
                     case '-':
-                        drawState.theta -= drawState.turning_angle;
+                        drawState.theta -= drawState.angle_increment * Math.PI / 180;
+                        break;
+                    case '[':
+                        stack.Push(drawState.Clone());
+                        break;
+                    case ']':
+                        if (stack.Count != 0)
+                        {
+                            drawState = stack.Pop();
+                        }
                         break;
                     default: break;
                 }
             }
+            MirrorAboutXAxis();
             return lines;
         }
     }

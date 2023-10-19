@@ -8,35 +8,40 @@ namespace WpfLSystems
 {
     class LSystem
     {
-        public String Word { get; set; }
+        public String Axiom { get; set; }
 
-        Dictionary<char, String> productions = new Dictionary<char, string>();
+        public List<(char, String)> productions = new List<(char, string)>();
 
         public LSystem(String axiom)
         {
-            Word = axiom;
-            AddProduction('F', "FF+F-F+F+FF");
+            Axiom = axiom;
+            AddProduction('F', "F[+F]F[-F]F");
         }
 
         public void AddProduction(char predecessor, String successor)
         {
-            productions.Add(predecessor, successor);
+            productions.Add((predecessor, successor));
         }
 
-        public void GenerateNextWord()
+        public String GenerateIteration(uint n)
         {
-            String newWord = "";
-            String buffer;
-            foreach (char character in Word) {
-                if (productions.TryGetValue(character, out buffer)) {
-                    newWord += buffer;
+            String currWord = Axiom;
+
+            for (uint i = 0; i < n; i++)
+            {
+                String nextWord = "";
+                foreach (char character in currWord) {
+                    if (productions.Exists(x => x.Item1 == character)) {
+                        nextWord += productions.Find(x => x.Item1 == character).Item2;
+                    }
+                    else
+                    {
+                        nextWord += character.ToString();
+                    }
                 }
-                else
-                {
-                    newWord += character.ToString();
-                }
+                currWord = nextWord;
             }
-            Word = newWord;
+            return currWord;
         }
     }
 }
